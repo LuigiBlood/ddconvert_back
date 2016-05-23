@@ -114,7 +114,7 @@ int main(int argc, char* argv[])
 				OutOffset = InStart[RevDiskTypeZones[disktype][zone]] + (track - atrack) * TRACKSIZE(zone);
 				fseek(out, OutOffset, SEEK_SET);
 				printf("Zone %d Track %x : 0x%08x to 0x%08x\n", zone, track, ftell(in), ftell(out));
-				if(track == SystemData[0x20 + zone*0xC + atrack])
+				if(atrack < 0xC && track == SystemData[0x20 + zone*0xC + atrack])
 				{
 					fread((void *)(&BlockData0), BLOCKSIZE(zone), 1, in);
 					fread((void *)(&BlockData1), BLOCKSIZE(zone), 1, in);
@@ -158,7 +158,7 @@ int main(int argc, char* argv[])
 				
 				//printf("Zone %d Track %x : 0x%08x to 0x%08x\n", zone, (ZoneTracks[zone] - track), ftell(in), ftell(out));
 				
-				if((ZoneTracks[zone] - track) == SystemData[0x20 + (zone)*0xC + atrack])
+				if((atrack > -1 && ZoneTracks[zone] - track) == SystemData[0x20 + (zone)*0xC + atrack])
 				{
 					memset((void *)(&BlockData0), 0, BLOCKSIZE(zone));
 					memset((void *)(&BlockData1), 0, BLOCKSIZE(zone));
